@@ -7,7 +7,7 @@ class ConsuladoApp:
         self.root = root
         self.root.title("Atendimento Consular Inteligente")
         self.translator = Translator()
-        self.language = 'pt'  # idioma padrão
+        self.language = 'pt'
 
         self.setup_ui()
 
@@ -24,7 +24,7 @@ class ConsuladoApp:
         self.btn_cpf = tk.Button(self.root, text="Criar CPF", command=self.acao_cpf)
         self.btn_cpf.pack(pady=5)
 
-        self.language_selector = ttk.Combobox(self.root, values=["Português", "Inglês", "Espanhol", "Alemão", "Italiano"])
+        self.language_selector = ttk.Combobox(self.root, values=["Português", "Inglês", "Espanhol", "Alemão", "Italiano", "Francês", "Chinês"])
         self.language_selector.current(0)
         self.language_selector.pack(pady=5)
         self.language_selector.bind("<<ComboboxSelected>>", self.translate_interface)
@@ -53,7 +53,9 @@ class ConsuladoApp:
             "Inglês": "en",
             "Espanhol": "es",
             "Alemão": "de",
-            "Italiano": "it"
+            "Italiano": "it",
+            "Francês": "fr",
+            "Chinês": "zh-cn"
         }
         escolha = self.language_selector.get()
         self.language = idioma_map[escolha]
