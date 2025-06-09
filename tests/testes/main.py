@@ -2,27 +2,6 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from googletrans import Translator
 
-
-class ConsuladoApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Atendimento Consular Inteligente")
-        self.translator = Translator()
-        self.language = 'pt'  # idioma padrão
-
-        self.setup_ui()
-
-    def setup_ui(self):
-        self.label_title = tk.Label(self.root, text="Bem-vindo ao Consulado", font=("Arial", 18))
-        self.label_title.pack(pady=10)
-
-        self.btn_passaporte = tk.Button(self.root, text="Solicitar Passaporte", command=self.acao_passaporte)
-        self.btn_passaporte.pack(pady=5)
-import tkinter as tk
-from tkinter import ttk, messagebox
-from googletrans import Translator
-
-
 class ConsuladoApp:
     def __init__(self, root):
         self.root = root
