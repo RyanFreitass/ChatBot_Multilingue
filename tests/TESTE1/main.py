@@ -159,7 +159,7 @@ class ConsuladoApp:
 
 
     # ======= RESPONDER PERGUNTAS [TESTE 1]=======
-    '''def responder(self, pergunta):
+    def responder(self, pergunta):
         mensagens = PerguntasUsuario()
         if self.language == 'pt':
             pergunta = pergunta.lower()
@@ -176,11 +176,75 @@ class ConsuladoApp:
             elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_idioma()):
                 return "Você pode trocar o idioma no menu suspenso acima."
             else:
-                return "Desculpe, não entendi. Pode reformular?"'''
+                return "Desculpe, não entendi. Pode reformular?"
+        
+        elif self.language == "en":
+            if any(mensagem in pergunta for mensagem in mensagens.get_mensagens_inicio()):
+                return "Hello! How can I assist you today?"
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_ajuda()):
+                return "Sure! How can I help you?"
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_passaporte()):
+                return "To request a passport, click the 'Request Passport' button."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_cpf()):
+                return "To create a CPF, click the 'Create CPF' button."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_registro()):
+                return "The Civil Registration service covers birth, marriage, and death."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_idioma()):
+                return "You can change the language in the dropdown menu above."
+            else:
+                return "Sorry, I didn't understand. Can you rephrase?"
+        
+        elif self.language == "es":
+            if any(mensagem in pergunta for mensagem in mensagens.get_mensagens_inicio()):
+                return "¡Hola! ¿Cómo puedo ayudarte hoy?"
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_ajuda()):
+                return "¡Claro! ¿Cómo puedo ayudarte?"
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_passaporte()):
+                return "Para solicitar un pasaporte, haga clic en el botón 'Solicitar Pasaporte'."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_cpf()):
+                return "Para crear un CPF, haga clic en el botón 'Crear CPF'."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_registro()):
+                return "El servicio de Registro Civil cubre nacimiento, matrimonio y defunción."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_idioma()):
+                return "Puede cambiar el idioma en el menú desplegable de arriba."
+            else:
+                return "Lo siento, no entendí. ¿Puedes reformular?"
+            
+        elif self.language == "de":
+            if any(mensagem in pergunta for mensagem in mensagens.get_mensagens_inicio()):
+                return "Hallo! Wie kann ich Ihnen heute helfen?"
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_ajuda()):
+                return "Natürlich! Wie kann ich Ihnen helfen?"
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_passaporte()):
+                return "Um einen Pass zu beantragen, klicken Sie auf die Schaltfläche 'Pass beantragen'."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_cpf()):
+                return "Um eine CPF zu erstellen, klicken Sie auf die Schaltfläche 'CPF erstellen'."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_registro()):
+                return "Der Standesamtdienst umfasst Geburt, Ehe und Tod."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_idioma()):
+                return "Sie können die Sprache im Dropdown-Menü oben ändern."
+            else:
+                return "Entschuldigung, ich habe es nicht verstanden. Können Sie umformulieren?"
+        
+        elif self.language == "it":
+            if any(mensagem in pergunta for mensagem in mensagens.get_mensagens_inicio()):
+                return "Ciao! Come posso aiutarti oggi?"
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_ajuda()):
+                return "Certo! Come posso aiutarti?"
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_passaporte()):
+                return "Per richiedere un passaporto, fai clic sul pulsante 'Richiedi Passaporto'."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_cpf()):
+                return "Per creare un CPF, fai clic sul pulsante 'Crea CPF'."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_registro()):
+                return "Il servizio di Registrazione Civile copre nascita, matrimonio e morte."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_idioma()):
+                return "Puoi cambiare la lingua nel menu a discesa sopra."
+            else:
+                return "Mi dispiace, non ho capito. Puoi riformulare?"
 
 
     # ======= RESPONDER PERGUNTAS [TESTE 2]=======
-    def responder(self, pergunta):
+    '''def responder(self, pergunta):
         if self.language == 'pt':
             pergunta = pergunta.lower()
             if "passaporte" in pergunta:
@@ -250,7 +314,7 @@ class ConsuladoApp:
             elif "ciao" in pergunta or "saluto" in pergunta:
                 return "Come posso aiutarti?"
             else:
-                return "Mi dispiace, non ho capito. Puoi riformulare?"
+                return "Mi dispiace, non ho capito. Puoi riformulare?"'''
                 
 
     # ======= TRADUÇÃO DA INTERFACE =======
