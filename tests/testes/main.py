@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from googletrans import Translator
+from mensagens_teste.perguntas import PerguntasUsuario
 
 class ConsuladoApp:
     def __init__(self, root):
@@ -156,6 +157,29 @@ class ConsuladoApp:
         self.chatbox.config(state='disabled')  # Torna somente leitura novamente
         self.entry.delete(0, tk.END)
 
+
+    # ======= RESPONDER PERGUNTAS [TESTE 1]=======
+    '''def responder(self, pergunta):
+        mensagens = PerguntasUsuario()
+        if self.language == 'pt':
+            pergunta = pergunta.lower()
+            if any(mensagem in pergunta for mensagem in mensagens.get_mensagens_inicio()):
+                return "Olá! Como posso lhe ajudar hoje?"
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_ajuda()):
+                return "Claro! Como posso ajudar você?"
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_passaporte()):
+                return "Para solicitar passaporte, clique no botão 'Solicitar Passaporte'."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_cpf()):
+                return "Para criar um CPF, clique no botão 'Criar CPF'."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_registro()):
+                return "O serviço de Registro Civil cobre nascimento, casamento e óbito."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_idioma()):
+                return "Você pode trocar o idioma no menu suspenso acima."
+            else:
+                return "Desculpe, não entendi. Pode reformular?"'''
+
+
+    # ======= RESPONDER PERGUNTAS [TESTE 2]=======
     def responder(self, pergunta):
         if self.language == 'pt':
             pergunta = pergunta.lower()
