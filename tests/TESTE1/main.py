@@ -32,15 +32,18 @@ class ConsuladoApp:
         self.language_selector.current(0)
         self.language_selector.pack(pady=5)
         self.language_selector.bind("<<ComboboxSelected>>", self.translate_interface)
+        self.language_selector.config(state='readonly')
+
 
         # Chatbot simples
-        self.chatbox = tk.Text(self.root, height=10, width=60)
+        self.chatbox = tk.Text(self.root, height=12, width=70, bg='black', fg='lime')
         self.chatbox.pack(pady=10)
         self.chatbox.config(state='disabled')
 
-        self.entry = tk.Entry(self.root, width=45)
+        self.entry = tk.Entry(self.root, width=45, bg='black', fg='lime', insertbackground='lime')
         self.entry.pack(side=tk.LEFT, padx=5)
         self.send_btn = tk.Button(self.root, text="Enviar", command=self.process_chat)
+        self.entry.bind("<Return>" , lambda event: self.process_chat())
         self.send_btn.pack(side=tk.RIGHT, padx=5)
 
     # ======= FORMULÁRIOS =======
