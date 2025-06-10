@@ -70,33 +70,33 @@ class ConsuladoApp:
             data = data_entry.get()
             rg = rg_entry.get()
             email = email_entry.get()
-            print(f"Solicitação de passaporte enviada para {nome} - {email}")
+            print(self.traduzir(f"Solicitação de passaporte enviada para {nome} - {email}"))
             messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir("Formulário enviado com sucesso!"))
 
         tk.Button(form, text=self.traduzir("Enviar"), command=enviar_formulario).pack(pady=10)
 
     def acao_registro(self):
         form = tk.Toplevel(self.root)
-        form.title("Formulário de Registro Civil")
+        form.title(self.traduzir("Formulário de Registro Civil"))
 
-        tk.Label(form, text="Tipo de Registro:").pack()
+        tk.Label(form, text=self.traduzir("Tipo de Registro:")).pack()
         tipo_var = tk.StringVar()
         tipo_combobox = ttk.Combobox(form, textvariable=tipo_var, values=["Nascimento", "Casamento", "Óbito"])
         tipo_combobox.pack()
 
-        tk.Label(form, text="Nome Completo:").pack()
+        tk.Label(form, text=self.traduzir("Nome Completo:")).pack()
         nome_entry = tk.Entry(form)
         nome_entry.pack()
 
-        tk.Label(form, text="Data do Evento (DD/MM/AAAA):").pack()
+        tk.Label(form, text=self.traduzir("Data do Evento (DD/MM/AAAA):")).pack()
         data_entry = tk.Entry(form)
         data_entry.pack()
 
-        tk.Label(form, text="Local do Evento:").pack()
+        tk.Label(form, text=self.traduzir("Local do Evento:")).pack()
         local_entry = tk.Entry(form)
         local_entry.pack()
 
-        tk.Label(form, text="Nome dos Pais (se aplicável):").pack()
+        tk.Label(form, text=self.traduzir("Nome dos Pais (se aplicável):")).pack()
         pais_entry = tk.Entry(form)
         pais_entry.pack()
 
@@ -107,31 +107,31 @@ class ConsuladoApp:
             local = local_entry.get()
             pais = pais_entry.get()
             print(f"Registro de {tipo} para {nome} enviado.")
-            messagebox.showinfo("Sucesso", f"Formulário de {tipo} enviado com sucesso!")
+            messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir(f"Formulário de {tipo} enviado com sucesso!"))
 
-        tk.Button(form, text="Enviar", command=enviar_formulario).pack(pady=10)
+        tk.Button(form, text=self.traduzir("Enviar"), command=enviar_formulario).pack(pady=10)
     
     def acao_cpf(self):
         form = tk.Toplevel(self.root)
-        form.title("Formulário de Solicitação de CPF")
+        form.title(self.traduzir("Formulário de Solicitação de CPF"))
 
-        tk.Label(form, text="Nome Completo:").pack()
+        tk.Label(form, text=self.traduzir("Nome Completo:")).pack()
         nome_entry = tk.Entry(form)
         nome_entry.pack()
 
-        tk.Label(form, text="Data de Nascimento (DD/MM/AAAA):").pack()
+        tk.Label(form, text=self.traduzir("Data de Nascimento (DD/MM/AAAA):")).pack()
         data_entry = tk.Entry(form)
         data_entry.pack()
 
-        tk.Label(form, text="Nome da Mãe:").pack()
+        tk.Label(form, text=self.traduzir("Nome da Mãe:")).pack()
         mae_entry = tk.Entry(form)
         mae_entry.pack()
 
-        tk.Label(form, text="Nacionalidade:").pack()
+        tk.Label(form, text=self.traduzir("Nacionalidade:")).pack()
         nac_entry = tk.Entry(form)
         nac_entry.pack()
 
-        tk.Label(form, text="Número de CPF").pack()
+        tk.Label(form, text=self.traduzir("Número de CPF")).pack()
         email_entry = tk.Entry(form)
         email_entry.pack()
 
@@ -141,10 +141,10 @@ class ConsuladoApp:
             mae = mae_entry.get()
             nac = nac_entry.get()
             email = email_entry.get()
-            print(f"Solicitação de CPF enviada para {nome} ({email})")
-            messagebox.showinfo("Sucesso", "Solicitação de CPF enviada com sucesso!")
+            print(self.traduzir(f"Solicitação de CPF enviada para {nome} ({email})"))
+            messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir("Solicitação de CPF enviada com sucesso!"))
 
-        tk.Button(form, text="Enviar", command=enviar_formulario).pack(pady=10)
+        tk.Button(form, text=self.traduzir("Enviar"), command=enviar_formulario).pack(pady=10)
         
 
     # ======= CHATBOT SIMPLES =======
