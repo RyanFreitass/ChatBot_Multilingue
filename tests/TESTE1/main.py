@@ -71,8 +71,27 @@ class ConsuladoApp:
             data = data_entry.get()
             rg = rg_entry.get()
             email = email_entry.get()
-            print(f"Solicitação de passaporte enviada para {nome} - {email}")
-            messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir("Formulário enviado com sucesso!"))
+
+            if not nome or not data or not rg or not email:
+                messagebox.showwarning("Dados, Incompletos", "Preencha todos os campos")
+
+            #validar data
+            if Validacao.validar_data(data) != "Data Válida":
+                messagebox.showerror("Erro", "Data inválida. Formato correto: DD/MM/AAAA")
+                return
+
+            #validar rg
+            if Validacao.validacao_rg(rg) != "Formato válido":
+                messagebox.showerror("Erro", "RG inválido. Formato correto: XX.XXX.XXX-X")
+                return
+            
+            #validar email
+            if not Validacao.validar_email(email):
+                messagebox.showerror("Erro", "E-mail inválido. Formato incorreto")
+                return
+
+            print(f"Solicitação de passaporte")
+            messagebox.showinfo("Sucesso", f"Formulário de passaporte enviado com sucesso")
 
         tk.Button(form, text=self.traduzir("Enviar"), command=enviar_formulario).pack(pady=10)
 
