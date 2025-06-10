@@ -33,15 +33,18 @@ class ConsuladoApp:
         self.language_selector.current(0)
         self.language_selector.pack(pady=5)
         self.language_selector.bind("<<ComboboxSelected>>", self.translate_interface)
+        self.language_selector.config(state='readonly')
+
 
         # Chatbot simples
-        self.chatbox = tk.Text(self.root, height=10, width=60)
+        self.chatbox = tk.Text(self.root, height=12, width=70, bg='black', fg='lime')
         self.chatbox.pack(pady=10)
         self.chatbox.config(state='disabled')
 
-        self.entry = tk.Entry(self.root, width=45)
+        self.entry = tk.Entry(self.root, width=45, bg='black', fg='lime', insertbackground='lime')
         self.entry.pack(side=tk.LEFT, padx=5)
         self.send_btn = tk.Button(self.root, text="Enviar", command=self.process_chat)
+        self.entry.bind("<Return>" , lambda event: self.process_chat())
         self.send_btn.pack(side=tk.RIGHT, padx=5)
 
     # ======= FORMULÁRIOS =======
@@ -97,26 +100,26 @@ class ConsuladoApp:
 
     def acao_registro(self):
         form = tk.Toplevel(self.root)
-        form.title("Formulário de Registro Civil")
+        form.title(self.traduzir("Formulário de Registro Civil"))
 
-        tk.Label(form, text="Tipo de Registro:").pack()
+        tk.Label(form, text=self.traduzir("Tipo de Registro:")).pack()
         tipo_var = tk.StringVar()
         tipo_combobox = ttk.Combobox(form, textvariable=tipo_var, values=["Nascimento", "Casamento", "Óbito"])
         tipo_combobox.pack()
 
-        tk.Label(form, text="Nome Completo:").pack()
+        tk.Label(form, text=self.traduzir("Nome Completo:")).pack()
         nome_entry = tk.Entry(form)
         nome_entry.pack()
 
-        tk.Label(form, text="Data do Evento (DD/MM/AAAA):").pack()
+        tk.Label(form, text=self.traduzir("Data do Evento (DD/MM/AAAA):")).pack()
         data_entry = tk.Entry(form)
         data_entry.pack()
 
-        tk.Label(form, text="Local do Evento:").pack()
+        tk.Label(form, text=self.traduzir("Local do Evento:")).pack()
         local_entry = tk.Entry(form)
         local_entry.pack()
 
-        tk.Label(form, text="Nome dos Pais (se aplicável):").pack()
+        tk.Label(form, text=self.traduzir("Nome dos Pais (se aplicável):")).pack()
         pais_entry = tk.Entry(form)
         pais_entry.pack()
 
@@ -127,31 +130,31 @@ class ConsuladoApp:
             local = local_entry.get()
             pais = pais_entry.get()
             print(f"Registro de {tipo} para {nome} enviado.")
-            messagebox.showinfo("Sucesso", f"Formulário de {tipo} enviado com sucesso!")
+            messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir(f"Formulário de {tipo} enviado com sucesso!"))
 
-        tk.Button(form, text="Enviar", command=enviar_formulario).pack(pady=10)
+        tk.Button(form, text=self.traduzir("Enviar"), command=enviar_formulario).pack(pady=10)
     
     def acao_cpf(self):
         form = tk.Toplevel(self.root)
-        form.title("Formulário de Solicitação de CPF")
+        form.title(self.traduzir("Formulário de Solicitação de CPF"))
 
-        tk.Label(form, text="Nome Completo:").pack()
+        tk.Label(form, text=self.traduzir("Nome Completo:")).pack()
         nome_entry = tk.Entry(form)
         nome_entry.pack()
 
-        tk.Label(form, text="Data de Nascimento (DD/MM/AAAA):").pack()
+        tk.Label(form, text=self.traduzir("Data de Nascimento (DD/MM/AAAA):")).pack()
         data_entry = tk.Entry(form)
         data_entry.pack()
 
-        tk.Label(form, text="Nome da Mãe:").pack()
+        tk.Label(form, text=self.traduzir("Nome da Mãe:")).pack()
         mae_entry = tk.Entry(form)
         mae_entry.pack()
 
-        tk.Label(form, text="Nacionalidade:").pack()
+        tk.Label(form, text=self.traduzir("Nacionalidade:")).pack()
         nac_entry = tk.Entry(form)
         nac_entry.pack()
 
-        tk.Label(form, text="Número de CPF").pack()
+        tk.Label(form, text=self.traduzir("Número de CPF")).pack()
         email_entry = tk.Entry(form)
         email_entry.pack()
 
@@ -161,10 +164,10 @@ class ConsuladoApp:
             mae = mae_entry.get()
             nac = nac_entry.get()
             email = email_entry.get()
-            print(f"Solicitação de CPF enviada para {nome} ({email})")
-            messagebox.showinfo("Sucesso", "Solicitação de CPF enviada com sucesso!")
+            print(self.traduzir(f"Solicitação de CPF enviada para {nome} ({email})"))
+            messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir("Solicitação de CPF enviada com sucesso!"))
 
-        tk.Button(form, text="Enviar", command=enviar_formulario).pack(pady=10)
+        tk.Button(form, text=self.traduzir("Enviar"), command=enviar_formulario).pack(pady=10)
         
 
     # ======= CHATBOT SIMPLES =======
