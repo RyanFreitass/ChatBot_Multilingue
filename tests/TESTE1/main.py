@@ -3,9 +3,11 @@ from tkinter import ttk, messagebox
 from googletrans import Translator
 from mensagens_teste.perguntas import PerguntasUsuario
 from Expressoes_regulares.validar import Validacao
+from database import criar_tabelas, inserir_passaporte, inserir_registro, inserir_cpf
 
 class ConsuladoApp:
     def __init__(self, root):
+        criar_tabelas()
         self.root = root
         self.root.title("Atendimento Consular Inteligente")
         self.translator = Translator()
@@ -37,11 +39,11 @@ class ConsuladoApp:
 
 
         # Chatbot simples
-        self.chatbox = tk.Text(self.root, height=12, width=70, bg='black', fg='lime')
+        self.chatbox = tk.Text(self.root, height=12, width=70, bg='gray', fg='black')
         self.chatbox.pack(pady=10)
         self.chatbox.config(state='disabled')
 
-        self.entry = tk.Entry(self.root, width=45, bg='black', fg='lime', insertbackground='lime')
+        self.entry = tk.Entry(self.root, width=45, bg='gray', fg='black', insertbackground='black')
         self.entry.pack(side=tk.LEFT, padx=5)
         self.send_btn = tk.Button(self.root, text="Enviar", command=self.process_chat)
         self.entry.bind("<Return>" , lambda event: self.process_chat())
@@ -74,6 +76,7 @@ class ConsuladoApp:
             data = data_entry.get()
             rg = rg_entry.get()
             email = email_entry.get()
+            inserir_passaporte(nome, data, rg, email)
             print(self.traduzir(f"Solicitação de passaporte enviada para {nome} - {email}"))
             messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir("Formulário enviado com sucesso!"))
 
@@ -110,6 +113,7 @@ class ConsuladoApp:
             data = data_entry.get()
             local = local_entry.get()
             pais = pais_entry.get()
+            inserir_registro(tipo, nome, data, local, pais)
             print(f"Registro de {tipo} para {nome} enviado.")
             messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir(f"Formulário de {tipo} enviado com sucesso!"))
 
@@ -145,6 +149,7 @@ class ConsuladoApp:
             mae = mae_entry.get()
             nac = nac_entry.get()
             email = email_entry.get()
+            inserir_cpf(nome, data, mae, nac, email)
             print(self.traduzir(f"Solicitação de CPF enviada para {nome} ({email})"))
             messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir("Solicitação de CPF enviada com sucesso!"))
 
