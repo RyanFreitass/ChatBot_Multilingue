@@ -76,33 +76,9 @@ class ConsuladoApp:
             data = data_entry.get()
             rg = rg_entry.get()
             email = email_entry.get()
-<<<<<<< HEAD
             inserir_passaporte(nome, data, rg, email)
             print(self.traduzir(f"Solicitação de passaporte enviada para {nome} - {email}"))
             messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir("Formulário enviado com sucesso!"))
-=======
-
-            if not nome or not data or not rg or not email:
-                messagebox.showwarning("Dados, Incompletos", "Preencha todos os campos")
-
-            #validar data
-            if Validacao.validar_data(data) != "Data Válida":
-                messagebox.showerror("Erro", "Data inválida. Formato correto: DD/MM/AAAA")
-                return
-
-            #validar rg
-            if Validacao.validacao_rg(rg) != "Formato válido":
-                messagebox.showerror("Erro", "RG inválido. Formato correto: XX.XXX.XXX-X")
-                return
-            
-            #validar email
-            if not Validacao.validar_email(email):
-                messagebox.showerror("Erro", "E-mail inválido. Formato incorreto")
-                return
-
-            print(f"Solicitação de passaporte")
-            messagebox.showinfo("Sucesso", f"Formulário de passaporte enviado com sucesso")
->>>>>>> bec0093b182de68e9222845d267f9b01b79e0b0e
 
         tk.Button(form, text=self.traduzir("Enviar"), command=enviar_formulario).pack(pady=10)
 
@@ -137,19 +113,7 @@ class ConsuladoApp:
             data = data_entry.get()
             local = local_entry.get()
             pais = pais_entry.get()
-<<<<<<< HEAD
             inserir_registro(tipo, nome, data, local, pais)
-=======
-
-            if not tipo or not nome or not data or not local or not pais:
-                messagebox.showwarning(self.traduzir("Dados Incompletos"), self.traduzir("Preencha todos os campos"))
-                return
-            
-            if Validacao.validar_data(data) != "Data Válida":
-                messagebox.showerror("Erro", "Data inválida. Formato correto: DD/MM/AAAA")
-                return
-
->>>>>>> b2509e1c7d6ce4ec9dbd28ccfc1b0d7cdb420466
             print(f"Registro de {tipo} para {nome} enviado.")
             messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir(f"Formulário de {tipo} enviado com sucesso!"))
 
