@@ -137,7 +137,19 @@ class ConsuladoApp:
             data = data_entry.get()
             local = local_entry.get()
             pais = pais_entry.get()
+<<<<<<< HEAD
             inserir_registro(tipo, nome, data, local, pais)
+=======
+
+            if not tipo or not nome or not data or not local or not pais:
+                messagebox.showwarning(self.traduzir("Dados Incompletos"), self.traduzir("Preencha todos os campos"))
+                return
+            
+            if Validacao.validar_data(data) != "Data Válida":
+                messagebox.showerror("Erro", "Data inválida. Formato correto: DD/MM/AAAA")
+                return
+
+>>>>>>> b2509e1c7d6ce4ec9dbd28ccfc1b0d7cdb420466
             print(f"Registro de {tipo} para {nome} enviado.")
             messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir(f"Formulário de {tipo} enviado com sucesso!"))
 
