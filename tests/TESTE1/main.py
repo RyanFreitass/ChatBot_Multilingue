@@ -44,24 +44,24 @@ class ConsuladoApp:
         self.send_btn.pack(side=tk.RIGHT, padx=5)
 
     # ======= FORMULÁRIOS =======
-
+    
     def acao_passaporte(self):
         form = tk.Toplevel(self.root)
-        form.title("Formulário de Solicitação de Passaporte")
+        form.title(self.traduzir("Formulário de Solicitação de Passaporte"))
 
-        tk.Label(form, text="Nome Completo:").pack()
+        tk.Label(form, text=self.traduzir("Nome Completo:")).pack()
         nome_entry = tk.Entry(form)
         nome_entry.pack()
 
-        tk.Label(form, text="Data de Nascimento (DD/MM/AAAA):").pack()
+        tk.Label(form, text=self.traduzir("Data de Nascimento (DD/MM/AAAA):")).pack()
         data_entry = tk.Entry(form)
         data_entry.pack()
 
-        tk.Label(form, text="Número de Identidade (RG):").pack()
+        tk.Label(form, text=self.traduzir("Número de Identidade (RG):")).pack()
         rg_entry = tk.Entry(form)
         rg_entry.pack()
 
-        tk.Label(form, text="E-mail para contato:").pack()
+        tk.Label(form, text=self.traduzir("E-mail para contato:")).pack()
         email_entry = tk.Entry(form)
         email_entry.pack()
 
@@ -71,9 +71,9 @@ class ConsuladoApp:
             rg = rg_entry.get()
             email = email_entry.get()
             print(f"Solicitação de passaporte enviada para {nome} - {email}")
-            messagebox.showinfo("Sucesso", "Formulário enviado com sucesso!")
+            messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir("Formulário enviado com sucesso!"))
 
-        tk.Button(form, text="Enviar", command=enviar_formulario).pack(pady=10)
+        tk.Button(form, text=self.traduzir("Enviar"), command=enviar_formulario).pack(pady=10)
 
     def acao_registro(self):
         form = tk.Toplevel(self.root)
@@ -110,7 +110,7 @@ class ConsuladoApp:
             messagebox.showinfo("Sucesso", f"Formulário de {tipo} enviado com sucesso!")
 
         tk.Button(form, text="Enviar", command=enviar_formulario).pack(pady=10)
-
+    
     def acao_cpf(self):
         form = tk.Toplevel(self.root)
         form.title("Formulário de Solicitação de CPF")
@@ -145,6 +145,7 @@ class ConsuladoApp:
             messagebox.showinfo("Sucesso", "Solicitação de CPF enviada com sucesso!")
 
         tk.Button(form, text="Enviar", command=enviar_formulario).pack(pady=10)
+        
 
     # ======= CHATBOT SIMPLES =======
 
@@ -318,6 +319,15 @@ class ConsuladoApp:
                 
 
     # ======= TRADUÇÃO DA INTERFACE =======
+    def traduzir(self, texto):
+        if self.language == "pt":
+            return texto
+        try:
+            return self.translator.translate(texto, src='pt', dest=self.language).text
+        except Exception as e:
+            print(f"Erro na tradução: {e}")
+            return texto
+
 
     def translate_interface(self, event=None):
         idioma_map = {
@@ -343,7 +353,6 @@ class ConsuladoApp:
                 widget.config(text=traducao)
             except Exception as e:
                 print(f"Erro na tradução: {e}")
-
 
 # ======= EXECUÇÃO DO APP =======
 
