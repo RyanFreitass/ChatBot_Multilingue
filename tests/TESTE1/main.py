@@ -29,6 +29,8 @@ class ConsuladoApp:
         self.btn_cpf = tk.Button(self.root, text="Cadastro CPF", command=self.acao_cpf)
         self.btn_cpf.pack(pady=5)
 
+        self.root.configure(bg='#f5f5dc') # backgroundcolor
+
         self.language_selector = ttk.Combobox(
             self.root,
             values=["Português", "Inglês", "Espanhol", "Alemão", "Italiano"]
@@ -44,11 +46,14 @@ class ConsuladoApp:
         self.chatbox.pack(pady=10)
         self.chatbox.config(state='disabled')
 
-        self.entry = tk.Entry(self.root, width=45, bg='gray', fg='black', insertbackground='black')
+        input_frame = tk.Frame(self.root)
+        input_frame.pack(pady=5)  # Centraliza por padrão
+
+        self.entry = tk.Entry(input_frame, width=45, bg='gray', fg='black', insertbackground='black')
         self.entry.pack(side=tk.LEFT, padx=5)
-        self.send_btn = tk.Button(self.root, text="Enviar", command=self.process_chat)
-        self.entry.bind("<Return>" , lambda event: self.process_chat())
-        self.send_btn.pack(side=tk.RIGHT, padx=5)
+        self.send_btn = tk.Button(input_frame, text="Enviar", command=self.process_chat)
+        self.entry.bind("<Return>", lambda event: self.process_chat())
+        self.send_btn.pack(side=tk.LEFT, padx=5)
 
     # ======= FORMULÁRIOS =======
     
