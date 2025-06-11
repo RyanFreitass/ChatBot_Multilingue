@@ -4,6 +4,7 @@ from googletrans import Translator
 from mensagens_teste.perguntas import PerguntasUsuario
 from Expressoes_regulares.validar import Validacao
 from database import criar_tabelas, inserir_passaporte, inserir_registro, inserir_cpf
+from Expressoes_regulares.gerador_cpf import Gerador
 
 class ConsuladoApp:
     def __init__(self, root):
@@ -169,22 +170,32 @@ class ConsuladoApp:
         nac_entry = tk.Entry(form)
         nac_entry.pack()
 
-        tk.Label(form, text=self.traduzir("Número de CPF")).pack()
-        email_entry = tk.Entry(form)
-        email_entry.pack()
+        tk.Label(form, text=self.traduzir("Novo CPF:")).pack()
+        cpf_var = tk.StringVar()
+        cpf_entry = tk.Entry(form, textvariable=cpf_var, state='readonly')
+        cpf_entry.pack()
+
+        def gerar_cpf():
+            gerador = Gerador()
+            novo_cpf = gerador.generate_cpf()
+            cpf_var.set(novo_cpf)
+
+        tk.Button(form, text=self.traduzir("Gerar CPF"), command=gerar_cpf).pack(pady=5)
 
         def enviar_formulario():
             nome = nome_entry.get()
             data = data_entry.get()
             mae = mae_entry.get()
             nac = nac_entry.get()
-            email = email_entry.get()
-            inserir_cpf(nome, data, mae, nac, email)
-            print(self.traduzir(f"Solicitação de CPF enviada para {nome} ({email})"))
+            cpf = cpf_var.get()
+            if not nome or not data or not mae or not nac or not cpf:
+                messagebox.showwarning(self.traduzir("Dados Incompletos"), self.traduzir("Preencha todos os campos"))
+                return
+            inserir_cpf(nome, data, mae, nac, cpf)
+            print(self.traduzir(f"Solicitação de CPF enviada para {nome} ({cpf})"))
             messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir("Solicitação de CPF enviada com sucesso!"))
 
         tk.Button(form, text=self.traduzir("Enviar"), command=enviar_formulario).pack(pady=10)
-        
 
     # ======= CHATBOT SIMPLES =======
 
