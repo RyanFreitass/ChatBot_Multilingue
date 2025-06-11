@@ -95,6 +95,8 @@ class ConsuladoApp:
 
             inserir_passaporte(nome, data, rg, email)
             print(self.traduzir(f"Solicitação de passaporte"))
+            inserir_passaporte(nome, data, rg, email)
+            print(self.traduzir(f"Solicitação de passaporte enviada para {nome} - {email}"))
             messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir("Formulário enviado com sucesso!"))
 
         tk.Button(form, text=self.traduzir("Enviar"), command=enviar_formulario).pack(pady=10)
@@ -142,6 +144,7 @@ class ConsuladoApp:
             
             inserir_registro(tipo, nome, data, local, pais)
             print(self.traduzir(f"Solicitação de registro civil para {nome} ({tipo})"))
+            print(f"Registro de {tipo} para {nome} enviado.")
             messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir(f"Formulário de {tipo} enviado com sucesso!"))
 
         tk.Button(form, text=self.traduzir("Enviar"), command=enviar_formulario).pack(pady=10)
@@ -278,81 +281,6 @@ class ConsuladoApp:
                 return "Puoi cambiare la lingua nel menu a discesa sopra."
             else:
                 return "Mi dispiace, non ho capito. Puoi riformulare?"
-
-
-    # ======= RESPONDER PERGUNTAS [TESTE 2]=======
-    '''def responder(self, pergunta):
-        if self.language == 'pt':
-            pergunta = pergunta.lower()
-            if "passaporte" in pergunta:
-                return "Para solicitar passaporte, clique no botão 'Solicitar Passaporte'."
-            elif "registro" in pergunta:
-                return "O serviço de Registro Civil cobre nascimento, casamento e óbito."
-            elif "cpf" in pergunta:
-                return "Para criar um CPF, clique no botão 'Criar CPF'."
-            elif "idioma" in pergunta or "traduzir" in pergunta:
-                return "Você pode trocar o idioma no menu suspenso acima."
-            elif "Oi" or "Olá" in pergunta:
-                return "Como posso lhe ajudar?"
-            else:
-                return "Desculpe, não entendi. Pode reformular?"
-            
-        if self.language == "en":
-            if "passport" in pergunta:
-                return "To request a passport, click the 'Request Passport' button."
-            elif "registration" in pergunta:
-                return "The Civil Registration service covers birth, marriage, and death."
-            elif "cpf" in pergunta:
-                return "To create a CPF, click the 'Create CPF' button."
-            elif "language" in pergunta or "translate" in pergunta:
-                return "You can change the language in the dropdown menu above."
-            elif "hi" or "hello" in pergunta:
-                return "How can I assist you?"
-            else:
-                return "Sorry, I didn't understand. Can you rephrase?"
-            
-        if self.language == "es":
-            if "pasaporte" in pergunta:
-                return "Para solicitar un pasaporte, haga clic en el botón 'Solicitar Pasaporte'."
-            elif "registro" in pergunta:
-                return "El servicio de Registro Civil cubre nacimiento, matrimonio y defunción."
-            elif "cpf" in pergunta:
-                return "Para crear un CPF, haga clic en el botón 'Crear CPF'."
-            elif "idioma" in pergunta or "traducir" in pergunta:
-                return "Puede cambiar el idioma en el menú desplegable de arriba."
-            elif "hola" in pergunta or "saludo" in pergunta:
-                return "¿Cómo puedo ayudarte?"
-            else:
-                return "Lo siento, no entendí. ¿Puedes reformular?"
-        
-        if self.language == "de":
-            if "pass" in pergunta:
-                return "Um Pass zu beantragen, klicken Sie auf die Schaltfläche 'Pass beantragen'."
-            elif "registrierung" in pergunta:
-                return "Der Standesamtdienst umfasst Geburt, Ehe und Tod."
-            elif "cpf" in pergunta:
-                return "Um eine CPF zu erstellen, klicken Sie auf die Schaltfläche 'CPF erstellen'."
-            elif "sprache" in pergunta or "übersetzen" in pergunta:
-                return "Sie können die Sprache im Dropdown-Menü oben ändern."
-            elif "hallo" in pergunta or "grüße" in pergunta:
-                return "Wie kann ich Ihnen helfen?"
-            else:
-                return "Entschuldigung, ich habe es nicht verstanden. Können Sie umformulieren?"
-        
-        if self.language == "it":
-            if "passaporto" in pergunta:
-                return "Per richiedere un passaporto, fai clic sul pulsante 'Richiedi Passaporto'."
-            elif "registrazione" in pergunta:
-                return "Il servizio di Registrazione Civile copre nascita, matrimonio e morte."
-            elif "cpf" in pergunta:
-                return "Per creare un CPF, fai clic sul pulsante 'Crea CPF'."
-            elif "lingua" in pergunta or "tradurre" in pergunta:
-                return "Puoi cambiare la lingua nel menu a discesa sopra."
-            elif "ciao" in pergunta or "saluto" in pergunta:
-                return "Come posso aiutarti?"
-            else:
-                return "Mi dispiace, non ho capito. Puoi riformulare?"'''
-                
 
     # ======= TRADUÇÃO DA INTERFACE =======
     def traduzir(self, texto):
