@@ -179,8 +179,23 @@ class ConsuladoApp:
             gerador = Gerador()
             novo_cpf = gerador.generate_cpf()
             cpf_var.set(novo_cpf)
+            btn_gerar_cpf.config(state='disabled')  # Desabilita o botão após gerar
 
-        tk.Button(form, text=self.traduzir("Gerar CPF"), command=gerar_cpf).pack(pady=5)
+        btn_gerar_cpf = tk.Button(form, text=self.traduzir("Gerar CPF"), command=gerar_cpf)
+        btn_gerar_cpf.pack(pady=5)
+
+        def enviar_formulario():
+            nome = nome_entry.get()
+            data = data_entry.get()
+            mae = mae_entry.get()
+            nac = nac_entry.get()
+            cpf = cpf_var.get()
+            if not nome or not data or not mae or not nac or not cpf:
+                messagebox.showwarning(self.traduzir("Dados Incompletos"), self.traduzir("Preencha todos os campos"))
+                return
+            inserir_cpf(nome, data, mae, nac, cpf)
+            print(self.traduzir(f"Solicitação de CPF enviada para {nome} ({cpf})"))
+            messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir("Solicitação de CPF enviada com sucesso!"))
 
         def enviar_formulario():
             nome = nome_entry.get()
