@@ -5,6 +5,8 @@ from mensagens_teste.perguntas import PerguntasUsuario
 from Expressoes_regulares.validar import Validacao
 from database import criar_tabelas, inserir_passaporte, inserir_registro, inserir_cpf
 from Expressoes_regulares.gerador_cpf import Gerador
+import sqlite3
+
 
 class ConsuladoApp:
     def __init__(self, root):
@@ -12,7 +14,7 @@ class ConsuladoApp:
         self.root = root
         self.root.title("Atendimento Consular Inteligente")
         self.translator = Translator()
-        self.language = 'pt'  # idioma padrão
+        self.language = 'pt'  # default language
 
         self.setup_ui()
 
@@ -28,6 +30,9 @@ class ConsuladoApp:
 
         self.btn_cpf = tk.Button(self.root, text="Cadastro CPF", command=self.acao_cpf)
         self.btn_cpf.pack(pady=5)
+
+        self.btn_relacao = tk.Button(self.root, text="Relação de Solicitações", command=self.abrir_relacao)
+        self.btn_relacao.pack(pady=5)
 
         self.root.configure(bg='#f5f5dc') # backgroundcolor
 
@@ -95,12 +100,10 @@ class ConsuladoApp:
                 messagebox.showerror(self.traduzir("Erro"), self.traduzir("E-mail inválido. Verifique o formato e tente novamente."))
                 return
             
-            if not Validacao.validar_rg(rg):
+            if not Validacao.validacao_rg(rg):
                 messagebox.showerror(self.traduzir("Erro"), self.traduzir("RG inválido. Verifique o formato e tente novamente."))
                 return
 
-            inserir_passaporte(nome, data, rg, email)
-            print(self.traduzir(f"Solicitação de passaporte"))
             inserir_passaporte(nome, data, rg, email)
             print(self.traduzir(f"Solicitação de passaporte enviada para {nome} - {email}"))
             messagebox.showinfo(self.traduzir("Sucesso"), self.traduzir("Formulário enviado com sucesso!"))
@@ -115,6 +118,7 @@ class ConsuladoApp:
         tipo_var = tk.StringVar()
         tipo_combobox = ttk.Combobox(form, textvariable=tipo_var, values=["Nascimento", "Casamento", "Óbito"])
         tipo_combobox.pack()
+        tipo_combobox.config(state='readonly')
 
         tk.Label(form, text=self.traduzir("Nome Completo:")).pack()
         nome_entry = tk.Entry(form)
@@ -138,7 +142,6 @@ class ConsuladoApp:
             data = data_entry.get()
             local = local_entry.get()
             pais = pais_entry.get()
-            inserir_registro(tipo, nome, data, local, pais)
 
             if not tipo or not nome or not data or not local or not pais:
                 messagebox.showwarning(self.traduzir("Dados Incompletos"), self.traduzir("Preencha todos os campos"))
@@ -348,6 +351,104 @@ class ConsuladoApp:
                 widget.config(text=traducao)
             except Exception as e:
                 print(f"Erro na tradução: {e}")
+    
+    def abrir_relacao(self):
+        conn = sqlite3.connect('consulado.db')
+        relacao_win = tk.Toplevel(self.root)
+        relacao_win.title(self.traduzir("Relação de Solicitações"))
+
+        notebook = ttk.Notebook(relacao_win)
+        notebook.pack(fill=tk.BOTH, expand=True)
+
+        # CPF
+        frame_cpf = ttk.Frame(notebook)
+        notebook.add(frame_cpf, text="CPF")
+        tree_cpf = ttk.Treeview(frame_cpf, columns=("cpf", "nome", "data_nasc", "mae", "nac"), show="headings")
+        for col, txt in zip(("cpf", "nome", "data_nasc", "mae", "nac"),
+                            ["CPF", "Nome", "Data de Nascimento", "Nome da Mãe", "Nacionalidade"]):
+            tree_cpf.heading(col, text=txt)
+            tree_cpf.column(col, width=120)
+        tree_cpf.pack(fill=tk.BOTH, expand=True)
+        cursor = conn.cursor()
+        cursor.execute("SELECT cpf_numero, nome, data_nascimento, mae, nacionalidade FROM cpf")
+        for row in cursor.fetchall():
+            tree_cpf.insert("", tk.END, values=row)
+
+        def deletar_cpf():
+            selected = tree_cpf.selection()
+            if not selected:
+                messagebox.showwarning("Atenção", "Selecione um cadastro para deletar.")
+                return
+            item = tree_cpf.item(selected[0])
+            cpf_numero = item['values'][0]
+            cursor.execute("DELETE FROM cpf WHERE cpf_numero = ?", (cpf_numero,))
+            conn.commit()
+            tree_cpf.delete(selected[0])
+            messagebox.showinfo("Sucesso", "Cadastro de CPF deletado.")
+
+        btn_del_cpf = tk.Button(frame_cpf, text="Deletar Selecionado", command=deletar_cpf)
+        btn_del_cpf.pack(pady=5)
+
+        # Passaporte
+        frame_pass = ttk.Frame(notebook)
+        notebook.add(frame_pass, text="Passaporte")
+        tree_pass = ttk.Treeview(frame_pass, columns=("nome", "data_nasc", "rg", "email"), show="headings")
+        for col, txt in zip(("nome", "data_nasc", "rg", "email"),
+                            ["Nome", "Data de Nascimento", "RG", "E-mail"]):
+            tree_pass.heading(col, text=txt)
+            tree_pass.column(col, width=120)
+        tree_pass.pack(fill=tk.BOTH, expand=True)
+        cursor.execute("SELECT nome, data_nascimento, rg, email FROM passaporte")
+        for row in cursor.fetchall():
+            tree_pass.insert("", tk.END, values=row)
+
+        def deletar_passaporte():
+            selected = tree_pass.selection()
+            if not selected:
+                messagebox.showwarning("Atenção", "Selecione um cadastro para deletar.")
+                return
+            item = tree_pass.item(selected[0])
+            rg = item['values'][2]
+            cursor.execute("DELETE FROM passaporte WHERE rg = ?", (rg,))
+            conn.commit()
+            tree_pass.delete(selected[0])
+            messagebox.showinfo("Sucesso", "Cadastro de Passaporte deletado.")
+
+        btn_del_pass = tk.Button(frame_pass, text="Deletar Selecionado", command=deletar_passaporte)
+        btn_del_pass.pack(pady=5)
+
+        # Registro Civil
+        frame_reg = ttk.Frame(notebook)
+        notebook.add(frame_reg, text="Registro Civil")
+        tree_reg = ttk.Treeview(frame_reg, columns=("tipo", "nome", "data", "local", "pais"), show="headings")
+        for col, txt in zip(("tipo", "nome", "data", "local", "pais"),
+                            ["Tipo", "Nome", "Data", "Local", "Pais"]):
+            tree_reg.heading(col, text=txt)
+            tree_reg.column(col, width=120)
+        tree_reg.pack(fill=tk.BOTH, expand=True)
+        cursor.execute("SELECT tipo, nome, data_evento, local_evento, pais FROM registro_civil")
+        for row in cursor.fetchall():
+            tree_reg.insert("", tk.END, values=row)
+
+        def deletar_registro():
+            selected = tree_reg.selection()
+            if not selected:
+                messagebox.showwarning("Atenção", "Selecione um cadastro para deletar.")
+                return
+            item = tree_reg.item(selected[0])
+            nome = item['values'][1]
+            data = item['values'][2]
+            cursor.execute("DELETE FROM registro_civil WHERE nome = ? AND data_evento = ?", (nome, data))
+            conn.commit()
+            tree_reg.delete(selected[0])
+            messagebox.showinfo("Sucesso", "Cadastro de Registro Civil deletado.")
+
+        btn_del_reg = tk.Button(frame_reg, text="Deletar Selecionado", command=deletar_registro)
+        btn_del_reg.pack(pady=5)
+
+    
+        relacao_win.protocol("WM_DELETE_WINDOW", lambda: (conn.close(), relacao_win.destroy()))
+
 
 # ======= EXECUÇÃO DO APP =======
 
