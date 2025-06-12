@@ -75,6 +75,22 @@ class PerguntasUsuario:
         ]
         self.mensagens_idioma = [palavra.upper() for palavra in self.mensagens_idioma] + \
                                 [palavra.lower() for palavra in self.mensagens_idioma]
+        
+        self.mensagens_abrir_relacoes = [
+            "Abrir relações", "Como faço para abrir relações?", "Quais são os documentos necessários para abrir relações?",
+            "Preciso de ajuda para abrir relações", "Relação de Solicitações", # Portugues
+            "Open relations", "How do I open relations?", "What documents are needed to open relations?",
+            "I need help to open relations", "Relation Requests", # Ingles
+            "Abrir relaciones", "¿Cómo abro relaciones?", "¿Qué documentos se necesitan para abrir relaciones?",
+            "Necesito ayuda para abrir relaciones", "Relación de Solicitudes", # Espanhol
+            "Beziehungen öffnen", "Wie öffne ich Beziehungen?", "Welche Dokumente werden benötigt, um Beziehungen zu öffnen?",
+            "Ich brauche Hilfe, um Beziehungen zu öffnen", "Beziehungsanfragen", # Alemao
+            "Aprire relazioni", "Come posso aprire relazioni?", "Quali documenti sono necessari per aprire relazioni?",
+            "Ho bisogno di aiuto per aprire relazioni", "Richieste di Relazione" # Italiano
+        ]
+        self.mensagens_abrir_relacoes = [palavra.upper() for palavra in self.mensagens_abrir_relacoes] + \
+                                        [palavra.lower() for palavra in self.mensagens_abrir_relacoes]
+
 
 
     def get_mensagens_inicio(self):
@@ -94,3 +110,6 @@ class PerguntasUsuario:
     
     def get_mensagens_idioma(self):
         return self.mensagens_idioma
+    
+    def get_mensagens_abrir_relacoes(self):
+        return self.mensagens_abrir_relacoes

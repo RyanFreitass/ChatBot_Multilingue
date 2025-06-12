@@ -6,6 +6,7 @@ from Expressoes_regulares.validar import Validacao
 from database import criar_tabelas, inserir_passaporte, inserir_registro, inserir_cpf
 from Expressoes_regulares.gerador_cpf import Gerador
 import sqlite3
+import os
 
 
 class ConsuladoApp:
@@ -13,6 +14,8 @@ class ConsuladoApp:
         criar_tabelas()
         self.root = root
         self.root.title("Atendimento Consular Inteligente")
+        import os
+        self.root.iconbitmap(os.path.join(os.path.dirname(__file__), "img", "icon.ico")) #Logo do Sistema
         self.translator = Translator()
         self.language = 'pt'  # default language
 
@@ -249,6 +252,8 @@ class ConsuladoApp:
                 return "O serviço de Registro Civil cobre nascimento, casamento e óbito."
             elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_idioma()):
                 return "Você pode trocar o idioma no menu suspenso acima."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_abrir_relacoes()):
+                return "Para abrir relações, clique no botão 'Relação de Solicitações'."
             else:
                 return "Desculpe, não entendi. Pode reformular?"
         
@@ -265,6 +270,8 @@ class ConsuladoApp:
                 return "The Civil Registration service covers birth, marriage, and death."
             elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_idioma()):
                 return "You can change the language in the dropdown menu above."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_abrir_relacoes()):
+                return "To open relations, click the 'Relation Requests' button."
             else:
                 return "Sorry, I didn't understand. Can you rephrase?"
         
@@ -281,6 +288,8 @@ class ConsuladoApp:
                 return "El servicio de Registro Civil cubre nacimiento, matrimonio y defunción."
             elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_idioma()):
                 return "Puede cambiar el idioma en el menú desplegable de arriba."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_abrir_relacoes()):
+                return "Para abrir relaciones, haga clic en el botón 'Relación de Solicitudes'."
             else:
                 return "Lo siento, no entendí. ¿Puedes reformular?"
             
@@ -297,6 +306,8 @@ class ConsuladoApp:
                 return "Der Standesamtdienst umfasst Geburt, Ehe und Tod."
             elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_idioma()):
                 return "Sie können die Sprache im Dropdown-Menü oben ändern."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_abrir_relacoes()):
+                return "Um Beziehungen zu öffnen, klicken Sie auf die Schaltfläche 'Beziehungsanfragen'."
             else:
                 return "Entschuldigung, ich habe es nicht verstanden. Können Sie umformulieren?"
         
@@ -313,6 +324,8 @@ class ConsuladoApp:
                 return "Il servizio di Registrazione Civile copre nascita, matrimonio e morte."
             elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_idioma()):
                 return "Puoi cambiare la lingua nel menu a discesa sopra."
+            elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_abrir_relacoes()):
+                return "Per aprire relazioni, fai clic sul pulsante 'Relazione di Richieste'."
             else:
                 return "Mi dispiace, non ho capito. Puoi riformulare?"
 
