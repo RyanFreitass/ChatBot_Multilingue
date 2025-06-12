@@ -3,7 +3,7 @@ import google.generativeai as genai
 
 
 API_KEY = \
-""
+"AIzaSyA-l_NXJHAOCqbO4SkWIEgtWCpS7LOSfF8"
 
 
 
