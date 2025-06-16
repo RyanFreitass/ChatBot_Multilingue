@@ -24,6 +24,8 @@ Este projeto tem como objetivo o desenvolvimento de um chatbot inteligente, com 
   pip install googletrans
   ```
 
+---
+
 ### 👨‍💻 Desenvolvedores:
 - Augusto Machado  
 - Ryan Freitas
