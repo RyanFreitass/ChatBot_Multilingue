@@ -7,7 +7,127 @@ from database import criar_tabelas, inserir_passaporte, inserir_registro, inseri
 from Expressoes_regulares.gerador_cpf import Gerador
 import sqlite3
 import os
+import google.generativeai as genai
 
+API_KEY = \
+""
+genai.configure(api_key=API_KEY)
+model = genai.GenerativeModel('gemini-2.0-flash')
+chat = model.start_chat()
+
+def criar_tabela_usuarios():
+    conn = sqlite3.connect('consulado.db')
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS usuarios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario TEXT NOT NULL,
+            senha TEXT NOT NULL
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+def inserir_usuario(usuario, senha):
+    conn = sqlite3.connect('consulado.db')
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO usuarios (usuario, senha) VALUES (?, ?)", (usuario, senha))
+    conn.commit()
+    conn.close()
+
+class LoginPage:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Consulate Login")
+        self.frame = tk.Frame(root)
+        self.frame.pack(padx=20, pady=20)
+
+        tk.Label(self.frame, text="User:").grid(row=0, column=0, pady=5)
+        self.entry_usuario = tk.Entry(self.frame)
+        self.entry_usuario.grid(row=0, column=1, pady=5)
+
+        tk.Label(self.frame, text="Password:").grid(row=1, column=0, pady=5)
+        self.entry_senha = tk.Entry(self.frame, show="*")
+        self.entry_senha.grid(row=1, column=1, pady=5)
+
+        self.btn_login = tk.Button(self.frame, text="Login", command=self.fazer_login)
+        self.btn_login.grid(row=2, column=0, columnspan=2, pady=10)
+
+        self.btn_criar_conta = tk.Button(self.frame, text="Create account", command=self.abrir_criar_conta)
+        self.btn_criar_conta.grid(row=3, column=0, columnspan=2, pady=5)
+
+    def fazer_login(self):
+        usuario = self.entry_usuario.get()
+        senha = self.entry_senha.get()
+        if not usuario or not senha:
+            messagebox.showwarning("Atenção", "Preencha usuário e senha.")
+            return
+        conn = sqlite3.connect('consulado.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM usuarios WHERE usuario = ? AND senha = ?", (usuario, senha))
+        resultado = cursor.fetchone()
+        conn.close()
+        if resultado:
+            for widget in self.root.winfo_children():
+                widget.destroy()
+            ConsuladoApp(self.root)
+        else:
+            messagebox.showerror("Erro", "Usuário ou senha incorretos.")
+
+    def abrir_criar_conta(self):
+        self.frame.destroy()
+        CriarContaPage(self.root, self)
+
+class CriarContaPage:
+    def __init__(self, root, login_page):
+        self.root = root
+        self.login_page = login_page
+        self.frame = tk.Frame(root)
+        self.frame.pack(padx=20, pady=20)
+
+        tk.Label(self.frame, text="New User:").grid(row=0, column=0, pady=5)
+        self.entry_novo_usuario = tk.Entry(self.frame)
+        self.entry_novo_usuario.grid(row=0, column=1, pady=5)
+
+        tk.Label(self.frame, text="New Password:").grid(row=1, column=0, pady=5)
+        self.entry_nova_senha = tk.Entry(self.frame, show="*")
+        self.entry_nova_senha.grid(row=1, column=1, pady=5)
+
+        tk.Label(self.frame, text="Confirm Password:").grid(row=2, column=0, pady=5)
+        self.entry_confirma_senha = tk.Entry(self.frame, show="*")
+        self.entry_confirma_senha.grid(row=2, column=1, pady=5)
+
+        self.btn_criar = tk.Button(self.frame, text="Create account", command=self.criar_conta)
+        self.btn_criar.grid(row=3, column=0, columnspan=2, pady=10)
+
+        self.btn_voltar = tk.Button(self.frame, text="Back", command=self.voltar_login)
+        self.btn_voltar.grid(row=4, column=0, columnspan=2, pady=5)
+
+    def criar_conta(self):
+        usuario = self.entry_novo_usuario.get()
+        senha = self.entry_nova_senha.get()
+        confirma = self.entry_confirma_senha.get()
+        if not usuario or not senha or not confirma:
+            messagebox.showwarning("Atenção", "Preencha todos os campos.")
+            return
+        if senha != confirma:
+            messagebox.showerror("Erro", "As senhas não coincidem.")
+            return
+        conn = sqlite3.connect('consulado.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM usuarios WHERE usuario = ?", (usuario,))
+        if cursor.fetchone():
+            conn.close()
+            messagebox.showerror("Erro", "Usuário já existe.")
+            return
+        inserir_usuario(usuario, senha)
+        conn.close()
+        messagebox.showinfo("Sucesso", "Conta criada com sucesso! Faça login.")
+        self.voltar_login()
+
+    def voltar_login(self):
+        self.frame.destroy()
+        LoginPage(self.root)
 
 class ConsuladoApp:
     def __init__(self, root):
@@ -31,13 +151,13 @@ class ConsuladoApp:
         self.btn_registro = tk.Button(self.root, text="Registro Civil", command=self.acao_registro)
         self.btn_registro.pack(pady=5)
 
-        self.btn_cpf = tk.Button(self.root, text="Cadastro CPF", command=self.acao_cpf)
+        self.btn_cpf = tk.Button(self.root, text="Criar CPF", command=self.acao_cpf)
         self.btn_cpf.pack(pady=5)
 
         self.btn_relacao = tk.Button(self.root, text="Relação de Solicitações", command=self.abrir_relacao)
         self.btn_relacao.pack(pady=5)
 
-        self.root.configure(bg='#f5f5dc') # backgroundcolor
+        self.root.configure(bg='#f5f5dc')  # Cor de fundo
 
         self.language_selector = ttk.Combobox(
             self.root,
@@ -48,14 +168,13 @@ class ConsuladoApp:
         self.language_selector.bind("<<ComboboxSelected>>", self.translate_interface)
         self.language_selector.config(state='readonly')
 
-
         # Chatbot simples
         self.chatbox = tk.Text(self.root, height=12, width=70, bg='gray', fg='black')
         self.chatbox.pack(pady=10)
         self.chatbox.config(state='disabled')
 
         input_frame = tk.Frame(self.root)
-        input_frame.pack(pady=5)  # Centraliza por padrão
+        input_frame.pack(pady=5)
 
         self.entry = tk.Entry(input_frame, width=45, bg='gray', fg='black', insertbackground='black')
         self.entry.pack(side=tk.LEFT, padx=5)
@@ -63,8 +182,6 @@ class ConsuladoApp:
         self.entry.bind("<Return>", lambda event: self.process_chat())
         self.send_btn.pack(side=tk.LEFT, padx=5)
 
-    # ======= FORMULÁRIOS =======
-    
     def acao_passaporte(self):
         form = tk.Toplevel(self.root)
         form.title(self.traduzir("Formulário de Solicitação de Passaporte"))
@@ -255,7 +372,11 @@ class ConsuladoApp:
             elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_abrir_relacoes()):
                 return "Para abrir relações, clique no botão 'Relação de Solicitações'."
             else:
-                return "Desculpe, não entendi. Pode reformular?"
+                try:
+                    response = chat.send_message(pergunta)
+                    return response.text
+                except Exception as e:
+                    return "Desculpe, não consegui responder no momento."
         
         elif self.language == "en":
             if any(mensagem in pergunta for mensagem in mensagens.get_mensagens_inicio()):
@@ -273,7 +394,11 @@ class ConsuladoApp:
             elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_abrir_relacoes()):
                 return "To open relations, click the 'Relation Requests' button."
             else:
-                return "Sorry, I didn't understand. Can you rephrase?"
+                try:
+                    response = chat.send_message(pergunta)
+                    return response.text
+                except Exception as e:
+                    return "sorry, I didn't understand. Can you rephrase?"
         
         elif self.language == "es":
             if any(mensagem in pergunta for mensagem in mensagens.get_mensagens_inicio()):
@@ -291,7 +416,11 @@ class ConsuladoApp:
             elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_abrir_relacoes()):
                 return "Para abrir relaciones, haga clic en el botón 'Relación de Solicitudes'."
             else:
-                return "Lo siento, no entendí. ¿Puedes reformular?"
+                try:
+                    response = chat.send_message(pergunta)
+                    return response.text
+                except Exception as e:
+                    return "Lo siento, no entendí. ¿Puedes reformularlo?"
             
         elif self.language == "de":
             if any(mensagem in pergunta for mensagem in mensagens.get_mensagens_inicio()):
@@ -309,7 +438,11 @@ class ConsuladoApp:
             elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_abrir_relacoes()):
                 return "Um Beziehungen zu öffnen, klicken Sie auf die Schaltfläche 'Beziehungsanfragen'."
             else:
-                return "Entschuldigung, ich habe es nicht verstanden. Können Sie umformulieren?"
+                try:
+                    response = chat.send_message(pergunta)
+                    return response.text
+                except Exception as e:
+                    return "Entschuldigung, ich habe es nicht verstanden. Können Sie es umformulieren?"
         
         elif self.language == "it":
             if any(mensagem in pergunta for mensagem in mensagens.get_mensagens_inicio()):
@@ -327,7 +460,11 @@ class ConsuladoApp:
             elif any(mensagem in pergunta for mensagem in mensagens.get_mensagens_abrir_relacoes()):
                 return "Per aprire relazioni, fai clic sul pulsante 'Relazione di Richieste'."
             else:
-                return "Mi dispiace, non ho capito. Puoi riformulare?"
+                try:
+                    response = chat.send_message(pergunta)
+                    return response.text
+                except Exception as e:
+                    return "sorry, I didn't understand. Can you rephrase?"
 
     # ======= TRADUÇÃO DA INTERFACE =======
     def traduzir(self, texto):
@@ -466,6 +603,7 @@ class ConsuladoApp:
 # ======= EXECUÇÃO DO APP =======
 
 if __name__ == "__main__":
+    criar_tabela_usuarios()
     root = tk.Tk()
-    app = ConsuladoApp(root)
+    LoginPage(root)
     root.mainloop()
