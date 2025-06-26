@@ -10,7 +10,7 @@ import os
 import google.generativeai as genai
 
 API_KEY = \
-""
+"AIzaSyA-l_NXJHAOCqbO4SkWIEgtWCpS7LOSfF8"
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-2.0-flash')
 chat = model.start_chat()
@@ -39,6 +39,8 @@ class LoginPage:
     def __init__(self, root):
         self.root = root
         self.root.title("Consulate Login")
+        import os
+        self.root.iconbitmap(os.path.join(os.path.dirname(__file__), "img", "icon.ico"))
         self.frame = tk.Frame(root)
         self.frame.pack(padx=20, pady=20)
 
@@ -82,6 +84,8 @@ class CriarContaPage:
     def __init__(self, root, login_page):
         self.root = root
         self.login_page = login_page
+        import os
+        self.root.iconbitmap(os.path.join(os.path.dirname(__file__), "img", "icon.ico"))
         self.frame = tk.Frame(root)
         self.frame.pack(padx=20, pady=20)
 
@@ -142,19 +146,34 @@ class ConsuladoApp:
         self.setup_ui()
 
     def setup_ui(self):
-        self.label_title = tk.Label(self.root, text="Bem-vindo ao Consulado", font=("Arial", 18))
+        self.label_title = tk.Label(self.root, text="Bem-vindo ao Consulado", font=("Arial", 18), **{
+            "bg": "#f5f5dc",  # Cor de fundo
+            "fg": "#2A5252",      # Cor do texto
+            "anchor": "center"
+        })
         self.label_title.pack(pady=10)
 
-        self.btn_passaporte = tk.Button(self.root, text="Solicitar Passaporte", command=self.acao_passaporte)
+        btn_style = {
+            "bg": "#4F8A8B",      # Cor de fundo
+            "fg": "white",        # Cor do texto
+            "activebackground": "#395B64",  # Cor ao clicar
+            "activeforeground": "white",    # Cor do texto ao clicar
+            "font": ("Arial", 12, "bold"),
+            "bd": 0,
+            "relief": tk.FLAT,
+            "cursor": "hand2"
+        }
+
+        self.btn_passaporte = tk.Button(self.root, text="Solicitar Passaporte", command=self.acao_passaporte, **btn_style)
         self.btn_passaporte.pack(pady=5)
 
-        self.btn_registro = tk.Button(self.root, text="Registro Civil", command=self.acao_registro)
+        self.btn_registro = tk.Button(self.root, text="Registro Civil", command=self.acao_registro, **btn_style)
         self.btn_registro.pack(pady=5)
 
-        self.btn_cpf = tk.Button(self.root, text="Criar CPF", command=self.acao_cpf)
+        self.btn_cpf = tk.Button(self.root, text="Criar CPF", command=self.acao_cpf, **btn_style)
         self.btn_cpf.pack(pady=5)
 
-        self.btn_relacao = tk.Button(self.root, text="Relação de Solicitações", command=self.abrir_relacao)
+        self.btn_relacao = tk.Button(self.root, text="Relação de Solicitações", command=self.abrir_relacao, **btn_style)
         self.btn_relacao.pack(pady=5)
 
         self.root.configure(bg='#f5f5dc')  # Cor de fundo
@@ -169,14 +188,14 @@ class ConsuladoApp:
         self.language_selector.config(state='readonly')
 
         # Chatbot simples
-        self.chatbox = tk.Text(self.root, height=12, width=70, bg='gray', fg='black')
+        self.chatbox = tk.Text(self.root, height=12, width=70, bg='gray', fg='white')
         self.chatbox.pack(pady=10)
         self.chatbox.config(state='disabled')
 
         input_frame = tk.Frame(self.root)
         input_frame.pack(pady=5)
 
-        self.entry = tk.Entry(input_frame, width=45, bg='gray', fg='black', insertbackground='black')
+        self.entry = tk.Entry(input_frame, width=45, bg='gray', fg='white', insertbackground='black')
         self.entry.pack(side=tk.LEFT, padx=5)
         self.send_btn = tk.Button(input_frame, text="Enviar", command=self.process_chat)
         self.entry.bind("<Return>", lambda event: self.process_chat())
@@ -492,7 +511,8 @@ class ConsuladoApp:
             self.label_title: "Bem-vindo ao Consulado",
             self.btn_passaporte: "Solicitar Passaporte",
             self.btn_registro: "Registro Civil",
-            self.btn_cpf: "Criar CPF"
+            self.btn_cpf: "Criar CPF",
+            self.btn_relacao: "Relação de Solicitações"
         }
 
         for widget, texto_original in textos.items():
