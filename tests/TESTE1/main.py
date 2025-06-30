@@ -15,6 +15,22 @@ genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-2.0-flash')
 chat = model.start_chat()
 
+
+def criar_gradiente(canvas, width, height, cor1, cor2):
+    # cor1 e cor2 em formato "#RRGGBB"
+    r1, g1, b1 = canvas.winfo_rgb(cor1)
+    r2, g2, b2 = canvas.winfo_rgb(cor2)
+    r_ratio = (r2 - r1) / height
+    g_ratio = (g2 - g1) / height
+    b_ratio = (b2 - b1) / height
+    for i in range(height):
+        nr = int(r1 + (r_ratio * i))
+        ng = int(g1 + (g_ratio * i))
+        nb = int(b1 + (b_ratio * i))
+        cor = f'#{nr//256:02x}{ng//256:02x}{nb//256:02x}'
+        canvas.create_line(0, i, width, i, fill=cor)
+
+
 def criar_tabela_usuarios():
     conn = sqlite3.connect('consulado.db')
     cursor = conn.cursor()
@@ -143,7 +159,19 @@ class ConsuladoApp:
         self.translator = Translator()
         self.language = 'pt'  # default language
 
+        self.canvas_bg = tk.Canvas(self.root, highlightthickness=0)
+        self.canvas_bg.place(x=0, y=0, relwidth=1, relheight=1)
+
+        # Redesenha o gradiente sempre que a janela for redimensionada
+        self.root.bind("<Configure>", self.redesenhar_gradiente)
+
         self.setup_ui()
+
+    def redesenhar_gradiente(self, event=None):
+        width = self.root.winfo_width()
+        height = self.root.winfo_height()
+        self.canvas_bg.delete("all")
+        criar_gradiente(self.canvas_bg, width, height, "#f5f5dc", "#4F8A8B")
 
     def setup_ui(self):
         self.label_title = tk.Label(self.root, text="Bem-vindo ao Consulado", font=("Arial", 18), **{
@@ -192,10 +220,10 @@ class ConsuladoApp:
         self.chatbox.pack(pady=10)
         self.chatbox.config(state='disabled')
 
-        input_frame = tk.Frame(self.root)
+        input_frame = tk.Frame(self.root, bg='#f5f5dc', highlightthickness=0, bd=0)
         input_frame.pack(pady=5)
 
-        self.entry = tk.Entry(input_frame, width=45, bg='gray', fg='white', insertbackground='black')
+        self.entry = tk.Entry(input_frame, width=45, bg='gray', fg='white', insertbackground='black', highlightthickness=0, bd=0)
         self.entry.pack(side=tk.LEFT, padx=5)
         self.send_btn = tk.Button(input_frame, text="Enviar", command=self.process_chat)
         self.entry.bind("<Return>", lambda event: self.process_chat())
