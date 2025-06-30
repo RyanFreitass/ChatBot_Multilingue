@@ -172,13 +172,17 @@ class ConsuladoApp:
         height = self.root.winfo_height()
         self.canvas_bg.delete("all")
         criar_gradiente(self.canvas_bg, width, height, "#f5f5dc", "#4F8A8B")
+    
 
     def setup_ui(self):
-        self.label_title = tk.Label(self.root, text="Bem-vindo ao Consulado", font=("Arial", 18), **{
-            "bg": "#f5f5dc",  # Cor de fundo
-            "fg": "#2A5252",      # Cor do texto
-            "anchor": "center"
-        })
+        self.label_title = tk.Label(
+            self.root,
+            text="Bem-vindo ao Consulado",
+            font=("Arial", 18),
+            fg="#2A5252",      # Cor do texto
+            bg="#f5f5dc",      # Cor de fundo
+            anchor="center"
+        )
         self.label_title.pack(pady=10)
 
         btn_style = {
@@ -220,10 +224,10 @@ class ConsuladoApp:
         self.chatbox.pack(pady=10)
         self.chatbox.config(state='disabled')
 
-        input_frame = tk.Frame(self.root, bg='#f5f5dc', highlightthickness=0, bd=0)
+        input_frame = tk.Frame(self.root)
         input_frame.pack(pady=5)
 
-        self.entry = tk.Entry(input_frame, width=45, bg='gray', fg='white', insertbackground='black', highlightthickness=0, bd=0)
+        self.entry = tk.Entry(input_frame, width=45, bg='gray', fg='white', insertbackground='black')
         self.entry.pack(side=tk.LEFT, padx=5)
         self.send_btn = tk.Button(input_frame, text="Enviar", command=self.process_chat)
         self.entry.bind("<Return>", lambda event: self.process_chat())
