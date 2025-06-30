@@ -1,12 +1,15 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 from googletrans import Translator
-from mensagens_teste.perguntas import PerguntasUsuario
-from Expressoes_regulares.validar import Validacao
-from database import criar_tabelas, inserir_passaporte, inserir_registro, inserir_cpf
-from Expressoes_regulares.gerador_cpf import Gerador
+from models.perguntas import PerguntasUsuario
+from models.validar import Validacao
+from models.database import criar_tabelas, inserir_passaporte, inserir_registro, inserir_cpf
+from models.gerador_cpf import Gerador
 import sqlite3
-import os
 import google.generativeai as genai
 
 API_KEY = \
@@ -55,8 +58,9 @@ class LoginPage:
     def __init__(self, root):
         self.root = root
         self.root.title("Consulate Login")
-        import os
-        self.root.iconbitmap(os.path.join(os.path.dirname(__file__), "img", "icon.ico"))
+        icon_path = os.path.join(os.path.dirname(__file__), "img", "icon.ico")
+        if os.path.exists(icon_path):
+            self.root.iconbitmap(icon_path)
         self.frame = tk.Frame(root)
         self.frame.pack(padx=20, pady=20)
 
@@ -100,8 +104,9 @@ class CriarContaPage:
     def __init__(self, root, login_page):
         self.root = root
         self.login_page = login_page
-        import os
-        self.root.iconbitmap(os.path.join(os.path.dirname(__file__), "img", "icon.ico"))
+        icon_path = os.path.join(os.path.dirname(__file__), "img", "icon.ico")
+        if os.path.exists(icon_path):
+            self.root.iconbitmap(icon_path)
         self.frame = tk.Frame(root)
         self.frame.pack(padx=20, pady=20)
 
@@ -154,8 +159,9 @@ class ConsuladoApp:
         criar_tabelas()
         self.root = root
         self.root.title("Atendimento Consular Inteligente")
-        import os
-        self.root.iconbitmap(os.path.join(os.path.dirname(__file__), "img", "icon.ico")) #Logo do Sistema
+        icon_path = os.path.join(os.path.dirname(__file__), "img", "icon.ico")
+        if os.path.exists(icon_path):
+            self.root.iconbitmap(icon_path)
         self.translator = Translator()
         self.language = 'pt'  # default language
 
